@@ -1,0 +1,8 @@
+TODO:
+generate two random number in Game constructor for Dice1 and Dice2
+update Player
+ExceptionMiddleware
+
+
+GET /players/ranking/loser: retorna el jugador/a  amb pitjor percentatge d’èxit.  
+GET /players/ranking/winner: retorna el  jugador amb pitjor percentatge d’èxit. 
