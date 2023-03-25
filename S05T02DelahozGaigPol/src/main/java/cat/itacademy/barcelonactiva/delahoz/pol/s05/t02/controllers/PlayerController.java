@@ -3,6 +3,7 @@ package cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,13 +58,19 @@ public class PlayerController {
 		  @ApiResponse(responseCode = "201", description = "Created", 
 		    content = { @Content(mediaType = "application/json",
 		    		schema = @Schema(implementation = PlayerDTO.class))}),
+		  @ApiResponse(responseCode = "409", description = "Player name conflict", 
+		    content = @Content), 
 		  @ApiResponse(responseCode = "500", description = "Internal server error", 
 		    content = @Content) })
 	@PostMapping
 	public ResponseEntity<PlayerDTO> add(@RequestBody Player player) {
 		try {
 			return new ResponseEntity<>(playerService.addPlayer(player), HttpStatus.CREATED);
-		} catch (Exception e) {
+		}
+		catch (DataIntegrityViolationException e) {
+			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+		}
+		catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -74,6 +81,8 @@ public class PlayerController {
 		    content = { @Content(mediaType = "application/json",
 		    		schema = @Schema(implementation = PlayerDTO.class))}),
 		  @ApiResponse(responseCode = "404", description = "Not found", 
+		    content = @Content), 
+		  @ApiResponse(responseCode = "409", description = "Player name conflict", 
 		    content = @Content), 
 		  @ApiResponse(responseCode = "500", description = "Internal server error", 
 		    content = @Content) })
@@ -88,7 +97,11 @@ public class PlayerController {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			
-		} catch (Exception e) {
+		}
+		catch (DataIntegrityViolationException e) {
+			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+		}
+		catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.exceptions.NotFoundException;
@@ -49,9 +52,35 @@ public class PlayerService implements IPlayerService{
 		        .orElseThrow(() -> new NotFoundException("Not found Player with id = " + id));
 		
 		_player.setName(player.getName());
-		PlayerDTO playerDto = new PlayerDTO(playerRepository.save(player));
+		PlayerDTO playerDto = new PlayerDTO(playerRepository.save(_player));
+		return new PlayerDTO(_player);
+	}
+	
+	/*
+	@Override
+	public PlayerDTO addPlayer(Player player) throws DuplicateNameException {
+		Player _player = new Player(player.getName());
+		
+		playerRepository.findByName(player.getName())
+				.orElseThrow(() -> new DuplicateNameException("A Player with this name already exists."));
+		
+		PlayerDTO playerDto = new PlayerDTO(playerRepository.save(_player));
 		return playerDto;
 	}
+	
+	@Override
+	public PlayerDTO updatePlayer(Integer id, Player player) throws NotFoundException, DuplicateNameException {
+		Player _player = playerRepository.findById(id)
+		        .orElseThrow(() -> new NotFoundException("Not found Player with id = " + id));
+		
+		playerRepository.findByName(player.getName())
+				.orElseThrow(() -> new DuplicateNameException("A Player with this name already exists."));
+		
+		_player.setName(player.getName());
+		PlayerDTO playerDto = new PlayerDTO(playerRepository.save(_player));
+		return new PlayerDTO(_player);
+	}
+	 */
 	
 	public double getTotalAverageWinRate() {
 		List<PlayerDTO> players = getAllPlayers();

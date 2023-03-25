@@ -18,7 +18,7 @@ public class PlayerDTO {
 	
 	private String name;
 
-	private double averageWinRate;
+	private double averageWinRate = 0;
 
 	private Date createdAt;
     
@@ -31,8 +31,11 @@ public class PlayerDTO {
     public void setAverageWinRate(List<GameDTO> games) {
     	int wins = games.stream().filter(c -> c.getResult() == GameResult.Win).collect(Collectors.toList()).size();
     	int total = games.size();
-    	double winRate = (double) wins/total * 100;
-    	//this.averageWinRate = df.format(winRate);
-    	this.averageWinRate = winRate;
+    	if (total > 0) {
+    		double winRate = (double) wins/total * 100;
+    		this.averageWinRate = winRate;
+    	}else {
+    		this.averageWinRate = 0;
+    	}
     }
 }
