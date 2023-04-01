@@ -3,3 +3,23 @@ Swagger customization for
 ExceptionMiddleware
 
 ERRORS:
+
+
+
+It@cademy169
+
+{
+  "sub": "auth0|641eb10a739976b7470e2c12",
+  "nickname": "poldelahoz",
+  "name": "poldelahoz@gmail.com",
+  "picture": "https://s.gravatar.com/avatar/3ffcd26cd4a8366e970780c656d9d7f7?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpo.png",
+  "updated_at": "2023-03-25T08:30:31.020Z"
+}
+
+Allowed Callback URLs
+http://localhost:9001/login/oauth2/code/auth0
+
+Allowed Logout URLs
+http://localhost:9001/
+
+gradlew clean bootRun

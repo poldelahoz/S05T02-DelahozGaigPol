@@ -18,6 +18,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.models.domain.Player;
@@ -26,6 +28,8 @@ import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.models.services.PlayerSe
 
 @RestController
 @RequestMapping("/players")
+@SecurityRequirement(name = "Bearer Authentication")
+@Tag(name = "Player", description = "The Player API. Contains all the operations that can be performed on a player.")
 public class PlayerController {
 	
 	@Autowired

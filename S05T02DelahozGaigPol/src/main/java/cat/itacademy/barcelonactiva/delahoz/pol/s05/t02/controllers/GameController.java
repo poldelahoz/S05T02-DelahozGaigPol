@@ -20,8 +20,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
+@SecurityRequirement(name = "Bearer Authentication")
+@Tag(name = "Game", description = "The Game API. Contains all the operations that can be performed on a player's game.")
 public class GameController {
 	
 	@Autowired
