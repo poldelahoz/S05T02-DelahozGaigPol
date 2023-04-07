@@ -3,7 +3,6 @@ package cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
+import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.exceptions.DuplicateNameException;
+import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.exceptions.NoPlayersRegisteredException;
+import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.exceptions.NotFoundException;
 import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.models.domain.Player;
 import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.models.dto.PlayerDTO;
 import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.models.services.PlayerService;
@@ -47,12 +48,14 @@ public class PlayerController {
 	@GetMapping
 	public ResponseEntity<List<PlayerDTO>> getAll() {
 		try {
-			List<PlayerDTO> players = playerService.getAllPlayers();
-			if (players.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-			return new ResponseEntity<>(players, HttpStatus.OK);
-		} catch (Exception e) {
+			return new ResponseEntity<>(playerService.getAllPlayers(), HttpStatus.OK);
+		}
+		catch (NoPlayersRegisteredException e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -71,10 +74,12 @@ public class PlayerController {
 		try {
 			return new ResponseEntity<>(playerService.addPlayer(player), HttpStatus.CREATED);
 		}
-		catch (DataIntegrityViolationException e) {
+		catch (DuplicateNameException e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 		}
 		catch (Exception e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -91,21 +96,20 @@ public class PlayerController {
 		  @ApiResponse(responseCode = "500", description = "Internal server error", 
 		    content = @Content) })
 	@PutMapping
-	public ResponseEntity<PlayerDTO> update(@RequestParam("id") Integer id, @RequestBody Player player) {
+	public ResponseEntity<PlayerDTO> update(@RequestParam("id") long id, @RequestBody Player player) {
 		try {
-			PlayerDTO _player = playerService.updatePlayer(id, player);
-			
-			if (_player != null) {
-				return new ResponseEntity<>(_player, HttpStatus.OK);
-			}else {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-			
+			return new ResponseEntity<>(playerService.updatePlayer(id, player), HttpStatus.OK);
 		}
-		catch (DataIntegrityViolationException e) {
+		catch (DuplicateNameException e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 		}
+		catch (NotFoundException e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 		catch (Exception e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -121,7 +125,13 @@ public class PlayerController {
 	public ResponseEntity<Double> getRanking() {
 		try {
 			return new ResponseEntity<>(playerService.getTotalAverageWinRate(), HttpStatus.OK);
-		} catch (Exception e) {
+		}
+		catch (NoPlayersRegisteredException e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -131,13 +141,21 @@ public class PlayerController {
 		  @ApiResponse(responseCode = "200", description = "Ok", 
 		    content = { @Content(mediaType = "application/json",
 		    		array = @ArraySchema(schema = @Schema(implementation = PlayerDTO.class)))}),
+		  @ApiResponse(responseCode = "204", description = "No content", 
+		    content = @Content), 
 		  @ApiResponse(responseCode = "500", description = "Internal server error", 
 		    content = @Content) })
 	@GetMapping("/ranking/winner")
 	public ResponseEntity<PlayerDTO> getWinnerPlayer() {
 		try {
 			return new ResponseEntity<>(playerService.getWinnerPlayer(), HttpStatus.OK);
-		} catch (Exception e) {
+		}
+		catch (NoPlayersRegisteredException e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -147,13 +165,21 @@ public class PlayerController {
 		  @ApiResponse(responseCode = "200", description = "Ok", 
 		    content = { @Content(mediaType = "application/json",
 		    		array = @ArraySchema(schema = @Schema(implementation = PlayerDTO.class)))}),
+		  @ApiResponse(responseCode = "204", description = "No content", 
+		    content = @Content), 
 		  @ApiResponse(responseCode = "500", description = "Internal server error", 
 		    content = @Content) })
 	@GetMapping("/ranking/loser")
 	public ResponseEntity<PlayerDTO> getLoserPlayer() {
 		try {
 			return new ResponseEntity<>(playerService.getLoserPlayer(), HttpStatus.OK);
-		} catch (Exception e) {
+		}
+		catch (NoPlayersRegisteredException e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

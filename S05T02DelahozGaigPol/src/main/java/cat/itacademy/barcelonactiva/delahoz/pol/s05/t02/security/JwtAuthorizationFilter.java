@@ -34,13 +34,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	 			Claims claims = validateToken(request);
 	 			if (claims.get("authorities") != null) {
 	 				setUpSpringAuthentication(claims);
+	 				chain.doFilter(request, response);
 	 			} else {
 	 				SecurityContextHolder.clearContext();
 	 			}
 	 		} else {
 	 			SecurityContextHolder.clearContext();
+	 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 	 		}
-	 		chain.doFilter(request, response);
 	 	} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
 	 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 	 		((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());

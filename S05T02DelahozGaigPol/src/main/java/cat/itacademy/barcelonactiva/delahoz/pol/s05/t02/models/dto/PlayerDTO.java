@@ -14,7 +14,7 @@ public class PlayerDTO {
 	
 	private static final DecimalFormat df = new DecimalFormat("0.00");
 	
-	private Integer id;
+	private long id;
 	
 	private String name;
 

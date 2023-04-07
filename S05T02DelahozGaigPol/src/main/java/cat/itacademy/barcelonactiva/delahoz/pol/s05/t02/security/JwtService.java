@@ -30,8 +30,7 @@ public class JwtService {
 				.setExpiration(new Date(System.currentTimeMillis() + 600000))
 				.signWith(SignatureAlgorithm.HS512, JwtAuthorizationFilter.SECRET.getBytes())
 				.compact();
-				//.signWith(SignatureAlgorithm.HS512,
-					//	secretKey.getBytes()).compact();
-		return "Bearer " + token;
+		
+		return token;
 	}
 }

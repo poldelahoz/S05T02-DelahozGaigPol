@@ -7,9 +7,9 @@ import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.models.dto.GameDTO;
 
 public interface IGameService {
 	
-	List<GameDTO> getAllGames(Integer id) throws NotFoundException;
+	GameDTO newGame(long id) throws NotFoundException;
 	
-	GameDTO newGame(Integer id) throws NotFoundException;
+	List<GameDTO> getAllGames(long id) throws NotFoundException;
 
-	void deleteAllGames(Integer id) throws NotFoundException;
+	void deleteAllGames(long id) throws NotFoundException;
 }

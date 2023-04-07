@@ -43,7 +43,7 @@ public class GameController {
 		  @ApiResponse(responseCode = "500", description = "Internal server error", 
 		    content = @Content) })
 	@GetMapping("/players/{id}/games")
-	public ResponseEntity<List<GameDTO>> getAll(@PathVariable("id") Integer id) {
+	public ResponseEntity<List<GameDTO>> getAll(@PathVariable("id") long id) {
 		try {
 			List<GameDTO> games = gameService.getAllGames(id);
 			if (games.isEmpty()) {
@@ -69,7 +69,7 @@ public class GameController {
 		  @ApiResponse(responseCode = "500", description = "Internal server error", 
 		    content = @Content) })
 	@PostMapping("/players/{id}/games")
-	public ResponseEntity<GameDTO> add(@PathVariable("id") Integer id) {
+	public ResponseEntity<GameDTO> add(@PathVariable("id") long id) {
 		try {
 			return new ResponseEntity<>(gameService.newGame(id), HttpStatus.CREATED);
 		} catch (NotFoundException e) {
@@ -90,7 +90,7 @@ public class GameController {
 		  @ApiResponse(responseCode = "500", description = "Internal server error", 
 		    content = @Content) })
 	@DeleteMapping("/players/{id}/games")
-	public ResponseEntity<GameDTO> deleteAll(@PathVariable("id") Integer id) {
+	public ResponseEntity<GameDTO> deleteAll(@PathVariable("id") long id) {
 		try {
 			gameService.deleteAllGames(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);

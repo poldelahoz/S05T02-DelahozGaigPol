@@ -1,13 +1,11 @@
 package cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.models.repository;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.models.domain.Game;
 import cat.itacademy.barcelonactiva.delahoz.pol.s05.t02.models.domain.Player;
 
-public interface PlayerRepository extends JpaRepository<Player, Integer>{
+public interface PlayerRepository extends MongoRepository<Player, Long>{
 	Optional<Player> findByName(String name);
 }
